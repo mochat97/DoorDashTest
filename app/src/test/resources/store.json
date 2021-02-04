@@ -1,0 +1,58 @@
+{
+  "is_consumer_subscription_eligible": true,
+  "promotion_delivery_fee": 0,
+  "delivery_fee": 0,
+  "delivery_fee_monetary_fields": {
+    "currency": "USD",
+    "display_string": "$0.00",
+    "unit_amount": 0,
+    "decimal_places": 2
+  },
+  "num_ratings": 0,
+  "id": 1373263,
+  "extra_sos_delivery_fee_monetary_fields": {
+    "currency": "USD",
+    "display_string": "$0.00",
+    "unit_amount": 0,
+    "decimal_places": 2
+  },
+  "menus": [
+    {
+      "popular_items": [],
+      "subtitle": "All Day",
+      "id": 1924874,
+      "name": "Aurum (All Day)(State St) 12.10.20 CSV",
+      "is_catering": false
+    }
+  ],
+  "average_rating": 0.0,
+  "location": {
+    "lat": 37.38014221191406,
+    "lng": -122.11566925048828
+  },
+  "status": {
+    "unavailable_reason": null,
+    "pickup_available": true,
+    "asap_available": true,
+    "scheduled_available": false,
+    "asap_minutes_range": [
+      34,
+      34
+    ]
+  },
+  "display_delivery_fee": "Free delivery",
+  "description": "Dessert, Beverages, Indian",
+  "business_id": 655953,
+  "extra_sos_delivery_fee": 0,
+  "cover_img_url": "https://cdn.doordash.com/static/img/restaurants/covers/aurum-cover.png",
+  "header_img_url": "",
+  "price_range": 1,
+  "name": "Aurum",
+  "is_newly_added": false,
+  "url": "/store/aurum-los-altos-1373263/",
+  "next_close_time": "2021-02-03T04:30:00Z",
+  "next_open_time": "2021-02-02T21:45:16Z",
+  "service_rate": null,
+  "distance_from_consumer": 3.230928889569556,
+  "merchant_promotions": []
+}
