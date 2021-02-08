@@ -13,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DoorDashTest">
         <activity android:name=".ui.restaurantlist.RestaurantListActivity"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.DoorDashTest.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,12 +21,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.restaurantinfo.RestaurantInfoActivity"
-            android:theme="@style/Theme.DoorDashTest.NoActionBar">
 
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.restaurantlist.RestaurantListActivity"/>
+        <activity android:name=".ui.restaurantdetails.RestaurantDetailsActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.DoorDashTest.NoActionBar"
+            android:parentActivityName=".ui.restaurantlist.RestaurantListActivity">
         </activity>
 
         <meta-data

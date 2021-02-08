@@ -18,20 +18,24 @@ import javax.inject.Singleton
 @Module
 object NetworkModule {
     @Provides
+    @Singleton
     fun providesMoshi(): Moshi = Moshi.Builder()
         .add(Date::class.java, Rfc3339DateJsonAdapter())
         .add(KotlinJsonAdapterFactory())
         .build()
 
     @Provides
+    @Singleton
     fun providesRetrofit(moshi: Moshi): Retrofit = Retrofit.Builder()
         .baseUrl("https://api.doordash.com/")
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
 
     @Provides
+    @Singleton
     fun providesRestaurantListService(retrofit: Retrofit): RestaurantListService = retrofit.create(RestaurantListService::class.java)
 
     @Provides
+    @Singleton
     fun providesRestaurantListManager(service: RestaurantListService) = RestaurantListManager(service)
 }

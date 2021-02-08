@@ -1,31 +1,40 @@
-package com.mshaw.doordashtest.ui.restaurantinfo
+package com.mshaw.doordashtest.ui.restaurantdetails
 
+import android.app.ProgressDialog
 import android.os.Bundle
+import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NavUtils
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.mshaw.doordashtest.R
-import com.mshaw.doordashtest.databinding.ActivityRestaurantInfoBinding
 import com.mshaw.doordashtest.models.Store
 import java.lang.IllegalStateException
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.mshaw.doordashtest.databinding.ActivityRestaurantDetailsBinding
 import com.mshaw.doordashtest.util.extensions.toLatLng
+import com.mshaw.doordashtest.util.state.State
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class RestaurantInfoActivity: AppCompatActivity(), OnMapReadyCallback {
+class RestaurantDetailsActivity: AppCompatActivity(), OnMapReadyCallback {
     companion object {
         const val STORE = "store"
     }
 
     lateinit var store: Store
-    private lateinit var binding: ActivityRestaurantInfoBinding
-    val viewModel: RestaurantInfoViewModel by lazy {
-        RestaurantInfoViewModel(store)
+    private val binding: ActivityRestaurantDetailsBinding by lazy {
+        ActivityRestaurantDetailsBinding.inflate(layoutInflater)
+    }
+
+    private val viewModel: RestaurantDetailsViewModel by viewModels()
+    private val progressDialog: ProgressDialog by lazy {
+        ProgressDialog(this).apply {
+            setMessage("Loading...")
+        }
     }
 
     private lateinit var mapView: SupportMapFragment
@@ -34,18 +43,45 @@ class RestaurantInfoActivity: AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
 
         store = intent?.getParcelableExtra(STORE) ?: throw IllegalStateException("$STORE must not be null")
-        binding = ActivityRestaurantInfoBinding.inflate(layoutInflater)
         binding.lifecycleOwner = this
-        binding.viewModel = viewModel
+        binding.store = store
+        binding.liveData = viewModel.restaurantDetailsDBLiveData
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         binding.collapsingToolbar.isTitleEnabled = store.headerImgUrl.isNotEmpty()
+        title = store.name
         mapView = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapView.onCreate(savedInstanceState)
-        mapView.getMapAsync(this)
+
+        viewModel.restaurantDetailsLiveData.observe(this) {
+            when (it) {
+                State.Loading -> {
+                    progressDialog.show()
+                }
+                is State.Success -> {
+                    progressDialog.dismiss()
+                    mapView.getMapAsync(this)
+                }
+                is State.Error -> {
+                    progressDialog.dismiss()
+                }
+            }
+        }
+
+        viewModel.getRestaurantDetails(store.id.toString())
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                NavUtils.navigateUpFromSameTask(this)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onMapReady(map: GoogleMap) {
@@ -53,10 +89,6 @@ class RestaurantInfoActivity: AppCompatActivity(), OnMapReadyCallback {
         map.addMarker(
             MarkerOptions()
                 .position(latLng)
-                .title("Marker")
-        )
-        map.addMarker(
-            MarkerOptions().position(latLng).title(store.name)
         )
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
         mapView.onResume()

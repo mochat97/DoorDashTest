@@ -30,7 +30,8 @@ class StoreTest : TestCase() {
     public override fun setUp() {
         super.setUp()
         store = try {
-            val reader = JsonReader.of(Buffer().readFrom(javaClass.getResourceAsStream("/store.json")))
+            val stream = javaClass.getResourceAsStream("/store.json") ?: return
+            val reader = JsonReader.of(Buffer().readFrom(stream))
             moshi.adapter(Store::class.java).fromJson(reader)
         } catch (e: Exception) {
             null
@@ -40,12 +41,18 @@ class StoreTest : TestCase() {
     @Test
     fun shouldGetDistanceFromConsumerIfOpen() {
         val currentDate = Date.from(OffsetDateTime.parse("2021-02-03T02:45:00Z").toInstant())
-        assert(store?.getDistanceFromConsumerFormatted(currentDate) == "3 mi")
+        assert(store?.getDistanceFromConsumerFormatted(currentDate) == "3.0 mi")
     }
 
     @Test
     fun shouldShowClosedIfAfterClosedDate() {
         val currentDate = Date.from(OffsetDateTime.parse("2021-02-03T07:45:00Z").toInstant())
+        assert(store?.getDistanceFromConsumerFormatted(currentDate) == "Closed")
+    }
+
+    @Test
+    fun shouldShowClosedIfBeforeOpenDate() {
+        val currentDate = Date.from(OffsetDateTime.parse("2021-02-02T18:45:16Z").toInstant())
         assert(store?.getDistanceFromConsumerFormatted(currentDate) == "Closed")
     }
 }

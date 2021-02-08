@@ -1,0 +1,214 @@
+{
+  "phone_number": "+16504614450",
+  "yelp_review_count": 0,
+  "is_consumer_subscription_eligible": true,
+  "offers_delivery": true,
+  "max_order_size": null,
+  "delivery_fee": 0,
+  "max_composite_score": 10,
+  "provides_external_courier_tracking": false,
+  "id": 62087,
+  "average_rating": 4.7,
+  "tags": [
+    "Burgers",
+    "Fast Food",
+    "Sandwiches",
+    "American",
+    "Vegetarian",
+    "Gluten-Free",
+    "Salads",
+    "Alcohol"
+  ],
+  "delivery_radius": 16094,
+  "inflation_rate": 0.0,
+  "menus": [
+    {
+      "status": "Available now",
+      "menu_version": 1,
+      "subtitle": "The Melt Menu",
+      "name": "Doordash Retail",
+      "open_hours": [
+        [
+          {
+            "hour": 10,
+            "minute": 0
+          },
+          {
+            "hour": 23,
+            "minute": 45
+          }
+        ],
+        [
+          {
+            "hour": 10,
+            "minute": 0
+          },
+          {
+            "hour": 23,
+            "minute": 45
+          }
+        ],
+        [
+          {
+            "hour": 10,
+            "minute": 0
+          },
+          {
+            "hour": 23,
+            "minute": 45
+          }
+        ],
+        [
+          {
+            "hour": 10,
+            "minute": 0
+          },
+          {
+            "hour": 23,
+            "minute": 45
+          }
+        ],
+        [
+          {
+            "hour": 10,
+            "minute": 0
+          },
+          {
+            "hour": 23,
+            "minute": 45
+          }
+        ],
+        [
+          {
+            "hour": 10,
+            "minute": 0
+          },
+          {
+            "hour": 23,
+            "minute": 45
+          }
+        ],
+        [
+          {
+            "hour": 10,
+            "minute": 0
+          },
+          {
+            "hour": 23,
+            "minute": 45
+          }
+        ]
+      ],
+      "is_business_enabled": null,
+      "is_catering": false,
+      "id": 1861624,
+      "status_type": "open"
+    }
+  ],
+  "show_store_menu_header_photo": false,
+  "composite_score": 9,
+  "fulfills_own_deliveries": false,
+  "offers_pickup": true,
+  "number_of_ratings": 2000,
+  "status_type": "open",
+  "is_only_catering": false,
+  "status": "44 - 54 mins",
+  "delivery_fee_details": {
+    "final_fee": {
+      "display_string": "$0.00",
+      "unit_amount": 0
+    },
+    "discount": {
+      "description": "",
+      "source_type": "first_delivery",
+      "text": "Try Free Delivery",
+      "discount_type": "try_free",
+      "amount": {
+        "currency": "USD",
+        "display_string": "$1.99",
+        "unit_amount": 199
+      },
+      "min_subtotal": {
+        "currency": "USD",
+        "display_string": "$0.00",
+        "unit_amount": 0
+      }
+    },
+    "surge_fee": {
+      "display_string": "$0.00",
+      "unit_amount": 0
+    },
+    "original_fee": {
+      "display_string": "$1.99",
+      "unit_amount": 199
+    }
+  },
+  "object_type": "restaurant.restaurant",
+  "description": "American (Traditional), Sandwiches",
+  "business": {
+    "business_vertical": null,
+    "id": 3289,
+    "name": "The Melt"
+  },
+  "yelp_biz_id": "",
+  "asap_time": 49,
+  "should_show_store_logo": true,
+  "yelp_rating": 0,
+  "extra_sos_delivery_fee": 0,
+  "business_id": 3289,
+  "special_instructions_max_length": 0,
+  "cover_img_url": "https://cdn.doordash.com/media/restaurant/cover/The-Melt.png",
+  "address": {
+    "city": "Palo Alto",
+    "subpremise": "",
+    "id": 56346784,
+    "printable_address": "711 Stanford Shopping Center, Palo Alto, CA 94304, USA",
+    "state": "CA",
+    "street": "711 Stanford Shopping Center",
+    "country": "United States",
+    "lat": 37.443096892,
+    "lng": -122.172771303,
+    "shortname": "711 Stanford Shopping Center",
+    "zip_code": "94304"
+  },
+  "price_range": 1,
+  "slug": "the-melt-palo-alto",
+  "show_suggested_items": true,
+  "name": "The Melt (Palo Alto)",
+  "is_newly_added": false,
+  "is_good_for_group_orders": true,
+  "service_rate": 11.0,
+  "merchant_promotions": [
+    {
+      "category_id": 1,
+      "description": "$0 Delivery Fee on orders $15+",
+      "title": "$0 Delivery Fee on Every Order",
+      "delivery_fee": 0,
+      "minimum_order_cart_subtotal": 1500,
+      "sort_order": 96,
+      "new_store_customers_only": false,
+      "id": 37641
+    },
+    {
+      "category_id": 1,
+      "description": null,
+      "title": "Top Restaurants in Your Area",
+      "delivery_fee": null,
+      "minimum_order_cart_subtotal": null,
+      "sort_order": 100,
+      "new_store_customers_only": false,
+      "id": 38901
+    },
+    {
+      "category_id": 1,
+      "description": null,
+      "title": "Top Restaurants in Your Area",
+      "delivery_fee": null,
+      "minimum_order_cart_subtotal": null,
+      "sort_order": 100,
+      "new_store_customers_only": false,
+      "id": 38900
+    }
+  ],
+  "header_image_url": null
+}

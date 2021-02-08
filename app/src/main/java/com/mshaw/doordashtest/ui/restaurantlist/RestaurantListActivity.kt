@@ -4,20 +4,33 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.mshaw.doordashtest.R
 import com.mshaw.doordashtest.adapters.RestaurantListAdapter
 import com.mshaw.doordashtest.databinding.ActivityRestaurantListBinding
+import com.mshaw.doordashtest.databinding.AlertDialogCoordinatesBinding
+import com.mshaw.doordashtest.models.RestaurantListResponse
 import com.mshaw.doordashtest.models.Store
-import com.mshaw.doordashtest.ui.restaurantinfo.RestaurantInfoActivity
+import com.mshaw.doordashtest.ui.restaurantdetails.RestaurantDetailsActivity
 import com.mshaw.doordashtest.util.EqualSpacingItemDecorator
+import com.mshaw.doordashtest.util.extensions.asString
+import com.mshaw.doordashtest.util.extensions.withCancelButton
 import com.mshaw.doordashtest.util.state.State
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class RestaurantListActivity: AppCompatActivity(), Listener {
-    lateinit var binding: ActivityRestaurantListBinding
+
     private val viewModel: RestaurantListViewModel by viewModels()
+
+    private val binding: ActivityRestaurantListBinding by lazy {
+        ActivityRestaurantListBinding.inflate(layoutInflater)
+    }
+
     private val adapter: RestaurantListAdapter by lazy {
         RestaurantListAdapter(this)
     }
@@ -31,33 +44,93 @@ class RestaurantListActivity: AppCompatActivity(), Listener {
                     binding.progressBar.show()
                 }
                 is State.Success -> {
+                    val response = it.value
                     binding.progressBar.hide()
-                    adapter.addStores(it.value)
+
+                    val stores = response.stores
+                    updateRecyclerView(stores)
                 }
                 is State.Error -> {
                     binding.progressBar.hide()
+                    binding.restaurantListRecyclerView.isVisible = false
                 }
             }
         }
 
-        binding = ActivityRestaurantListBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setTitle(R.string.restaurant_list)
+        setSupportActionBar(binding.toolbar)
 
         setupBinding()
 
         viewModel.fetchRestaurantList(37.422740, -122.139956, 0, 50)
     }
 
+    private fun updateRecyclerView(stores: List<Store>) {
+        binding.restaurantListRecyclerView.isVisible = stores.isNotEmpty()
+        adapter.restaurants = stores
+    }
+
     private fun setupBinding() {
         val dp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,16f, resources.displayMetrics).toInt()
-        binding.restaurantListRecyclerView.addItemDecoration(EqualSpacingItemDecorator(dp))
-        binding.restaurantListRecyclerView.adapter = adapter
-        binding.restaurantListRecyclerView.layoutManager = LinearLayoutManager(this)
+        val recyclerView = binding.restaurantListRecyclerView
+        val fab = binding.fab
+
+        recyclerView.addItemDecoration(EqualSpacingItemDecorator(dp))
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 0) {
+                    fab.hide()
+                } else {
+                    fab.show()
+                }
+            }
+        })
+
+        fab.setOnClickListener {
+            val coordinatesView = AlertDialogCoordinatesBinding.inflate(layoutInflater)
+            val dialog = AlertDialog.Builder(this).setView(coordinatesView.root)
+                .setTitle("Enter coordinates")
+                .withCancelButton()
+                .setPositiveButton("Search", null)
+                .create()
+
+            dialog.setOnShowListener {
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                    var isValid = true
+                    val latitude = try {
+                        coordinatesView.latitudeEditText.asString().toDouble()
+                    } catch (e: Exception) {
+                        coordinatesView.tilLatitudeEditText.error = "Invalid input"
+                        isValid = false
+                        0.0
+                    }
+
+                    val longitude = try {
+                        coordinatesView.longitudeEditText.asString().toDouble()
+                    } catch (e: Exception) {
+                        coordinatesView.tilLongitudeEditText.error = "Invalid input"
+                        isValid = false
+                        0.0
+                    }
+
+                    if (isValid) {
+                        viewModel.fetchRestaurantList(latitude, longitude, 0, 50)
+                        dialog.dismiss()
+                    }
+                }
+            }
+
+            dialog.show()
+        }
     }
 
     override fun onStoreSelected(store: Store) {
-        startActivity(Intent(this, RestaurantInfoActivity::class.java).apply {
-            putExtra(RestaurantInfoActivity.STORE, store)
+        startActivity(Intent(this, RestaurantDetailsActivity::class.java).apply {
+            putExtra(RestaurantDetailsActivity.STORE, store)
         })
     }
 }

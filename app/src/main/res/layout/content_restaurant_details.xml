@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="androidx.lifecycle.LiveData" />
+        <variable
+            name="liveData"
+            type="LiveData&lt;com.mshaw.doordashtest.models.RestaurantDetailsResponse>" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/map"
+                android:layout_width="match_parent"
+                android:layout_height="144dp"
+                tools:context=".MapsActivity"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <ImageView
+                android:id="@+id/address_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                app:tint="@color/title_text_color"
+                app:srcCompat="@drawable/ic_location"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/map"/>
+
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@{liveData.addressFormatted}"
+                tools:text="123 Anytown St\nBeverly Hills, CA 90210"
+                app:layout_constraintStart_toEndOf="@id/address_icon"
+                app:layout_constraintTop_toTopOf="@id/address_icon"
+                app:layout_constraintBottom_toBottomOf="@id/address_icon"/>
+
+            <ImageView
+                android:id="@+id/phone_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                app:tint="@color/title_text_color"
+                app:srcCompat="@drawable/ic_phone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/address_icon"/>
+
+            <TextView
+                android:id="@+id/phone_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@{liveData.phoneNumberFormatted}"
+                tools:text="Phone Number: +11234567890"
+                app:layout_constraintStart_toEndOf="@id/phone_icon"
+                app:layout_constraintTop_toTopOf="@id/phone_icon"
+                app:layout_constraintBottom_toBottomOf="@id/phone_icon"/>
+
+            <ImageView
+                android:id="@+id/delivery_fee_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                app:tint="@color/title_text_color"
+                app:srcCompat="@drawable/ic_money"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/phone_icon"/>
+
+            <TextView
+                android:id="@+id/delivery_fee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@{liveData.deliveryFeeFormatted}"
+                tools:text="Delivery Fee: $1.00"
+                app:layout_constraintStart_toEndOf="@id/delivery_fee_image_view"
+                app:layout_constraintTop_toTopOf="@id/delivery_fee_image_view"
+                app:layout_constraintBottom_toBottomOf="@id/delivery_fee_image_view"/>
+
+            <ImageView
+                android:id="@+id/delivery_time_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                app:tint="@color/title_text_color"
+                app:srcCompat="@drawable/ic_time"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/delivery_fee_image_view"/>
+
+            <TextView
+                android:id="@+id/delivery_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@{liveData.deliveryTimeFormatted}"
+                tools:text="Delivery time: 45 - 55 mins"
+                app:layout_constraintStart_toEndOf="@id/delivery_time_image_view"
+                app:layout_constraintTop_toTopOf="@id/delivery_time_image_view"
+                app:layout_constraintBottom_toBottomOf="@id/delivery_time_image_view"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>

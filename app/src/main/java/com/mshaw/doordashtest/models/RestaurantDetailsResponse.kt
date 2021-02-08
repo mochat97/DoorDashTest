@@ -106,7 +106,7 @@ data class RestaurantDetailsResponse(
 
     val phoneNumberFormatted: String
         get() {
-            return PhoneNumberUtils.formatNumber(phoneNumber?.replace("+1", ""), Locale.getDefault().country)
+            return formatNumber(phoneNumber?.replace("+1", ""), Locale.getDefault().country)
         }
 
     val deliveryFeeFormatted: String
@@ -117,6 +117,8 @@ data class RestaurantDetailsResponse(
 
     val deliveryTimeFormatted: String
         get() = "Delivery time: $status"
+
+    fun formatNumber(number: String?, defaultCountryIso: String): String = PhoneNumberUtils.formatNumber(number, defaultCountryIso)
 }
 
 @JsonClass(generateAdapter = true)

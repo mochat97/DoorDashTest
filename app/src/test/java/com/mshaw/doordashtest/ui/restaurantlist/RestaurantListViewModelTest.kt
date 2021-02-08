@@ -40,7 +40,7 @@ class RestaurantListViewModelTest : TestCase() {
     private val testDispatcher = TestCoroutineDispatcher()
 
     @Mock
-    private lateinit var observer: Observer<in State<List<Store>>>
+    private lateinit var observer: Observer<in State<RestaurantListResponse>>
 
     @Mock
     private lateinit var response: Response
@@ -59,6 +59,11 @@ class RestaurantListViewModelTest : TestCase() {
         .add(Date::class.java, Rfc3339DateJsonAdapter())
         .build()
 
+    private val lat = 37.422740
+    private val lng = -122.139956
+    private val offset = 0
+    private val limit = 50
+
     @Before
     public override fun setUp() {
         super.setUp()
@@ -67,7 +72,8 @@ class RestaurantListViewModelTest : TestCase() {
         viewModel.restaurantListLiveData.observeForever(observer)
 
         successfulResponse = try {
-            val reader = JsonReader.of(Buffer().readFrom(javaClass.getResourceAsStream("/restaurant_list_response.json")))
+            val stream = javaClass.getResourceAsStream("/restaurant_list_response.json") ?: return
+            val reader = JsonReader.of(Buffer().readFrom(stream))
             moshi.adapter(RestaurantListResponse::class.java).fromJson(reader)
         } catch (e: Exception) {
             null
@@ -89,17 +95,25 @@ class RestaurantListViewModelTest : TestCase() {
 
     @Test
     fun shouldEmitSuccessState() = runBlocking {
-        `when`(restaurantListManager.getRestaurantList(37.422740, -122.139956, 0, 50)).thenReturn(AwaitResult.Ok(successfulResponse!!, response))
-        viewModel.fetchRestaurantList(37.422740, -122.139956, 0, 50)
-        verify(observer).onChanged(State.Success(successfulResponse!!.stores))
+        val successfulResponse = successfulResponse
+        if (successfulResponse == null) {
+            fail("successResponse is null")
+            return@runBlocking
+        }
+
+        `when`(restaurantListManager.getRestaurantList(lat, lng, offset, limit)).thenReturn(AwaitResult.Ok(successfulResponse, response))
+
+        viewModel.fetchRestaurantList(lat, lng, offset, limit)
+        verify(observer).onChanged(State.Success(successfulResponse))
         viewModel.restaurantListLiveData.removeObserver(observer)
     }
 
     @Test
     fun shouldEmitErrorState() = runBlocking {
         val exception = Exception()
-        `when`(restaurantListManager.getRestaurantList(37.422740, -122.139956, 0, 50)).thenReturn(AwaitResult.Error(exception))
-        viewModel.fetchRestaurantList(37.422740, -122.139956, 0, 50)
+        `when`(restaurantListManager.getRestaurantList(lat, lng, offset, limit)).thenReturn(AwaitResult.Error(exception))
+
+        viewModel.fetchRestaurantList(lat, lng, offset, limit)
         verify(observer).onChanged(State.Error(exception))
         viewModel.restaurantListLiveData.removeObserver(observer)
     }

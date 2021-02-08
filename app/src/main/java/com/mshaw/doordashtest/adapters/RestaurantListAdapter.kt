@@ -8,11 +8,12 @@ import com.mshaw.doordashtest.databinding.ItemRestaurantInfoBinding
 import com.mshaw.doordashtest.models.Store
 import java.util.*
 
-class RestaurantListAdapter(val listener: Listener, private val restaurants: MutableList<Store> = mutableListOf()): RecyclerView.Adapter<RestaurantListAdapter.ViewHolder>() {
-    fun addStores(stores: List<Store>) {
-        restaurants += stores
-        notifyDataSetChanged()
-    }
+class RestaurantListAdapter(val listener: Listener): RecyclerView.Adapter<RestaurantListAdapter.ViewHolder>() {
+    var restaurants: List<Store> = emptyList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
