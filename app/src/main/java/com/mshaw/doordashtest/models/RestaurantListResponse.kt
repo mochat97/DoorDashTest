@@ -1,16 +1,13 @@
 package com.mshaw.doordashtest.models
 import android.os.Parcelable
-import com.squareup.moshi.JsonClass
+import com.mshaw.doordashtest.util.extensions.round
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
-import java.time.DateTimeException
-import java.time.LocalDateTime
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.math.roundToInt
 
 @JsonClass(generateAdapter = true)
+@Parcelize
 data class RestaurantListResponse(
     @Json(name = "is_first_time_user")
     val isFirstTimeUser: Boolean,
@@ -24,7 +21,7 @@ data class RestaurantListResponse(
     val sortOrder: String,
     @Json(name = "stores")
     val stores: List<Store>
-)
+): Parcelable
 
 @JsonClass(generateAdapter = true)
 @Parcelize
@@ -83,10 +80,10 @@ data class Store(
     val url: String
 ): Parcelable {
     fun getDistanceFromConsumerFormatted(date: Date): String {
-        return if (nextCloseTime.before(date)) {
-            "Closed"
+        return if (date.after(nextOpenTime) && date.before(nextCloseTime)) {
+            "${distanceFromConsumer.round(0.5)} mi"
         } else {
-            "${distanceFromConsumer.roundToInt()} mi"
+            "Closed"
         }
     }
 }
