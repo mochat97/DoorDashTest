@@ -1,6 +1,5 @@
 package com.mshaw.doordashtest.models
 
-import android.telephony.PhoneNumberUtils
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
@@ -14,11 +13,9 @@ import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
 import org.mockito.Mockito.doReturn
 import org.mockito.junit.MockitoJUnitRunner
-import org.powermock.core.classloader.annotations.PrepareForTest
 import java.util.*
 
 @RunWith(MockitoJUnitRunner::class)
-@PrepareForTest(PhoneNumberUtils::class)
 class RestaurantDetailsResponseTest : TestCase() {
     private var restaurantDetailsResponse: RestaurantDetailsResponse? = null
     private var restaurantDetailsResponseSpy: RestaurantDetailsResponse? = null
@@ -39,6 +36,25 @@ class RestaurantDetailsResponseTest : TestCase() {
         }
 
         restaurantDetailsResponseSpy = Mockito.spy(restaurantDetailsResponse)
+    }
+
+    @Test
+    fun shouldFormatAddress() {
+        val correctFormatting = """
+            711 Stanford Shopping Center
+            Palo Alto, CA 94304
+        """.trimIndent()
+        assert(restaurantDetailsResponse?.addressFormatted == correctFormatting)
+    }
+
+    @Test
+    fun shouldFormatDeliveryFee() {
+        assert(restaurantDetailsResponse?.deliveryFeeFormatted == "Delivery fee: $1.99")
+    }
+
+    @Test
+    fun shouldFormatDeliveryTime() {
+        assert(restaurantDetailsResponse?.deliveryTimeFormatted == "Delivery time: 44 - 54 mins")
     }
 
     @Test
