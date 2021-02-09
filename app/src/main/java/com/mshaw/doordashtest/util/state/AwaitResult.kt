@@ -1,4 +1,4 @@
-package com.mshaw.doordashtest.util
+package com.mshaw.doordashtest.util.state
 
 import okhttp3.Response
 

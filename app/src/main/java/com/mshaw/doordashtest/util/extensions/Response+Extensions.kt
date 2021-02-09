@@ -1,7 +1,7 @@
 package com.mshaw.doordashtest.util.extensions
 
-import com.mshaw.doordashtest.util.AwaitResult
-import com.mshaw.doordashtest.util.ErrorResponse
+import com.mshaw.doordashtest.util.state.AwaitResult
+import com.mshaw.doordashtest.util.state.ErrorResponse
 import com.squareup.moshi.Moshi
 import retrofit2.HttpException
 import retrofit2.Response

@@ -1,4 +1,4 @@
-package com.mshaw.doordashtest.network.restaurantlist
+package com.mshaw.doordashtest.network.restaurant
 
 import com.mshaw.doordashtest.models.RestaurantDetailsResponse
 import com.mshaw.doordashtest.models.RestaurantListResponse
@@ -7,7 +7,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface RestaurantListService {
+interface RestaurantService {
     @GET("/v1/store_feed/")
     suspend fun getRestaurantList(@Query("lat") lat: Double,
                                   @Query("lng") lng: Double,

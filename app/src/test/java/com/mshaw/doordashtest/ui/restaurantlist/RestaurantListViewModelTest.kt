@@ -1,14 +1,11 @@
 package com.mshaw.doordashtest.ui.restaurantlist
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.mshaw.doordashtest.models.RestaurantListResponse
-import com.mshaw.doordashtest.models.Store
-import com.mshaw.doordashtest.network.restaurantlist.RestaurantListManager
-import com.mshaw.doordashtest.util.AwaitResult
+import com.mshaw.doordashtest.network.restaurant.RestaurantManager
+import com.mshaw.doordashtest.util.state.AwaitResult
 import com.mshaw.doordashtest.util.state.State
-import com.mshaw.doordashtest.utils.TestCoroutineRule
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
@@ -31,7 +28,6 @@ import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
-import retrofit2.HttpException
 import java.util.*
 
 @RunWith(MockitoJUnitRunner::class)
@@ -49,7 +45,7 @@ class RestaurantListViewModelTest : TestCase() {
     val testInstantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Mock
-    private lateinit var restaurantListManager: RestaurantListManager
+    private lateinit var restaurantManager: RestaurantManager
 
     @Mock
     private lateinit var viewModel: RestaurantListViewModel
@@ -68,7 +64,7 @@ class RestaurantListViewModelTest : TestCase() {
     public override fun setUp() {
         super.setUp()
         Dispatchers.setMain(testDispatcher)
-        viewModel = RestaurantListViewModel(restaurantListManager)
+        viewModel = RestaurantListViewModel(restaurantManager)
         viewModel.restaurantListLiveData.observeForever(observer)
 
         successfulResponse = try {
@@ -101,7 +97,7 @@ class RestaurantListViewModelTest : TestCase() {
             return@runBlocking
         }
 
-        `when`(restaurantListManager.getRestaurantList(lat, lng, offset, limit)).thenReturn(AwaitResult.Ok(successfulResponse, response))
+        `when`(restaurantManager.getRestaurantList(lat, lng, offset, limit)).thenReturn(AwaitResult.Ok(successfulResponse, response))
 
         viewModel.fetchRestaurantList(lat, lng, offset, limit)
         verify(observer).onChanged(State.Success(successfulResponse))
@@ -111,7 +107,7 @@ class RestaurantListViewModelTest : TestCase() {
     @Test
     fun shouldEmitErrorState() = runBlocking {
         val exception = Exception()
-        `when`(restaurantListManager.getRestaurantList(lat, lng, offset, limit)).thenReturn(AwaitResult.Error(exception))
+        `when`(restaurantManager.getRestaurantList(lat, lng, offset, limit)).thenReturn(AwaitResult.Error(exception))
 
         viewModel.fetchRestaurantList(lat, lng, offset, limit)
         verify(observer).onChanged(State.Error(exception))

@@ -1,15 +1,14 @@
-package com.mshaw.doordashtest.network.restaurantlist
+package com.mshaw.doordashtest.network.restaurant
 
 import com.mshaw.doordashtest.models.RestaurantDetailsResponse
 import com.mshaw.doordashtest.models.RestaurantListResponse
-import com.mshaw.doordashtest.util.AwaitResult
+import com.mshaw.doordashtest.util.state.AwaitResult
 import com.mshaw.doordashtest.util.extensions.awaitResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import retrofit2.Response
 import javax.inject.Inject
 
-class RestaurantListManager @Inject constructor(private val service: RestaurantListService) {
+class RestaurantManager @Inject constructor(private val service: RestaurantService) {
     suspend fun getRestaurantList(lat: Double,
                                   lng: Double,
                                   offset: Int,
