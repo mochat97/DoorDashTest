@@ -20,7 +20,7 @@ data class RestaurantListResponse(
     @Json(name = "sort_order")
     val sortOrder: String,
     @Json(name = "stores")
-    val stores: List<Store>
+    val stores: MutableList<Store>
 ): Parcelable
 
 @JsonClass(generateAdapter = true)
@@ -86,6 +86,8 @@ data class Store(
             "Closed"
         }
     }
+
+    var isFavorited: Boolean = false
 }
 
 @JsonClass(generateAdapter = true)

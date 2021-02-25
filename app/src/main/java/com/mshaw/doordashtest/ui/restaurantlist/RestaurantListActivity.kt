@@ -1,11 +1,13 @@
 package com.mshaw.doordashtest.ui.restaurantlist
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.TypedValue
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,13 +20,18 @@ import com.mshaw.doordashtest.models.Store
 import com.mshaw.doordashtest.ui.restaurantdetails.RestaurantDetailsActivity
 import com.mshaw.doordashtest.util.EqualSpacingItemDecorator
 import com.mshaw.doordashtest.util.extensions.asString
+import com.mshaw.doordashtest.util.extensions.get
+import com.mshaw.doordashtest.util.extensions.set
 import com.mshaw.doordashtest.util.extensions.withCancelButton
 import com.mshaw.doordashtest.util.state.State
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class RestaurantListActivity: AppCompatActivity(), Listener {
 
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
     private val viewModel: RestaurantListViewModel by viewModels()
 
     private val binding: ActivityRestaurantListBinding by lazy {
@@ -48,6 +55,10 @@ class RestaurantListActivity: AppCompatActivity(), Listener {
                     binding.progressBar.hide()
 
                     val stores = response.stores
+                    stores.forEach { store ->
+                        store.isFavorited = sharedPreferences.get<Boolean>(store.id.toString()) == true
+                    }
+
                     updateRecyclerView(stores)
                 }
                 is State.Error -> {
@@ -133,8 +144,13 @@ class RestaurantListActivity: AppCompatActivity(), Listener {
             putExtra(RestaurantDetailsActivity.STORE, store)
         })
     }
+
+    override fun onFavorited(id: String, isFavorited: Boolean) {
+        sharedPreferences[id] = isFavorited
+    }
 }
 
 interface Listener {
     fun onStoreSelected(store: Store)
+    fun onFavorited(id: String, isFavorited: Boolean)
 }
